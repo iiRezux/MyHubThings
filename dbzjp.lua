@@ -592,6 +592,10 @@ function Library:CreateWindow(Name, Size, HideButton)
                     label.Main.Text = value
                 end
 
+                function label:Enabled(value)
+                    label.Main.Visible = value
+                end
+
                 sector:FixSize()
                 return label
             end
