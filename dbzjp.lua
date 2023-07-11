@@ -818,11 +818,12 @@ function Library:CreateWindow(Name, Size, HideButton)
                     return keybind
                 end
 
-                function button:AddKeybind(default)
+                function button:AddKeybind(default, flag)
                     local keybind = { }
 
                     keybind.default = default or "None"
                     keybind.value = keybind.default
+                    keybind.flag = flag or ( (toggle.text or "") .. tostring(#toggle.Items:GetChildren()))
 
                     local shorter_keycodes = {
                         ["LeftShift"] = "LSHIFT",
