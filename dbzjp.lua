@@ -818,6 +818,91 @@ function Library:CreateWindow(Name, Size, HideButton)
                     return keybind
                 end
 
+                function button:AddKeybind(default)
+                    local keybind = { }
+
+                    keybind.default = default or "None"
+                    keybind.value = keybind.default
+
+                    local shorter_keycodes = {
+                        ["LeftShift"] = "LSHIFT",
+                        ["RightShift"] = "RSHIFT",
+                        ["LeftControl"] = "LCTRL",
+                        ["RightControl"] = "RCTRL",
+                        ["LeftAlt"] = "LALT",
+                        ["RightAlt"] = "RALT"
+                    }
+
+                    local text = keybind.default == "None" and "[None]" or "[" .. (shorter_keycodes[keybind.default.Name] or keybind.default.Name) .. "]"
+                    local Size = game:GetService("TextService"):GetTextSize(text, 15, Window.Theme.Font, Vector2.new(2000, 2000))
+
+                    keybind.Main = Instance.new("TextButton", toggle.Items)
+                    keybind.Main.Name = "keybind"
+                    keybind.Main.BackgroundTransparency = 1
+                    keybind.Main.BorderSizePixel = 0
+                    keybind.Main.ZIndex = 5
+                    keybind.Main.Size = UDim2.fromOffset(Size.X + 2, Size.Y - 7)
+                    keybind.Main.Text = text
+                    keybind.Main.Font = Window.Theme.Font
+                    keybind.Main.TextColor3 = Color3.fromRGB(136, 136, 136)
+                    keybind.Main.TextSize = 15
+                    keybind.Main.TextXAlignment = Enum.TextXAlignment.Right
+                    keybind.Main.MouseButton1Down:Connect(function()
+                        keybind.Main.Text = "[...]"
+                        keybind.Main.TextColor3 = Window.Theme.AccentColor
+                    end)
+                    Instance.new("BindableEvent").Event:Connect(function(Theme)
+                        keybind.Main.Font = Theme.Font
+                        if keybind.Main.Text == "[...]" then
+                            keybind.Main.TextColor3 = Theme.AccentColor
+                        else
+                            keybind.Main.TextColor3 = Color3.fromRGB(136, 136, 136)
+                        end
+                    end)
+
+                    if keybind.flag and keybind.flag ~= "" then
+                        Library.Flags[keybind.flag] = keybind.default
+                    end
+                    function keybind:Set(key)
+                        if key == "None" then
+                            keybind.Main.Text = "[" .. key .. "]"
+                            keybind.value = key
+                            if keybind.flag and keybind.flag ~= "" then
+                                Library.Flags[keybind.flag] = key
+                            end
+                        end
+                        keybind.Main.Text = "[" .. (shorter_keycodes[key.Name] or key.Name) .. "]"
+                        keybind.value = key
+                        if keybind.flag and keybind.flag ~= "" then
+                            Library.Flags[keybind.flag] = keybind.value
+                        end
+                    end
+
+                    function keybind:Get()
+                        return keybind.value
+                    end
+
+                    game:GetService("UserInputService").InputBegan:Connect(function(Input, gameProcessed)
+                        if not gameProcessed then
+                            if keybind.Main.Text == "[...]" then
+                                keybind.Main.TextColor3 = Color3.fromRGB(136, 136, 136)
+                                if Input.UserInputType == Enum.UserInputType.Keyboard then
+                                    keybind:Set(Input.KeyCode)
+                                else
+                                    keybind:Set("None")
+                                end
+                            else
+                                if keybind.value ~= "None" and Input.KeyCode == keybind.value then
+                                    button.callback()
+                                end
+                            end
+                        end
+                    end)
+
+                    table.insert(Library.Items, keybind)
+                    return keybind
+                end
+
                 function toggle:AddDropdown(Items, default, multichoice, callback, flag)
                     local dropdown = { }
 
