@@ -894,7 +894,7 @@ function Library:CreateWindow(Name, Size, HideButton)
                                 end
                             else
                                 if keybind.value ~= "None" and Input.KeyCode == keybind.value then
-                                    button.callback()
+                                    button.callback
                                 end
                             end
                         end
