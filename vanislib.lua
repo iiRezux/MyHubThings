@@ -28,8 +28,8 @@ function library:CreateWindow(name, version, icon)
 	for i = 1, math.random(3,20) do
 		RandomString = RandomString..string.char(math.random(97,122))
 	end
-	ProtectInstance(MyGui)
-	ProtectInstance(Window)
+	protect_gui(MyGui)
+	protect_gui(Window)
 
 	MyGui.Name = "VanisLib"
 	MyGui.Parent = cloneref(game:GetService("CoreGui"))
