@@ -4,8 +4,6 @@ end
 
 -- extra credits to twink marie
 local library = {}
-local request = request or http_request or (identifyexecutor() == "Synapse X" and syn.request) or (http and http.request)
-loadstring(game:HttpGet('https://raw.githubusercontent.com/cypherdh/Script-Library/main/InstanceProtect', true))()
 local UIS = game:GetService("UserInputService")
 local TS = game:GetService("TweenService")
 function library:CreateWindow(name, version, icon)
