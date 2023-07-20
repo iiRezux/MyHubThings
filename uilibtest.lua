@@ -1651,12 +1651,11 @@ function Library:CreateWindow(Name, Size, HideButton)
                     function slider:Refresh()
                         local mousePos = game:GetService("Workspace").CurrentCamera:WorldToViewportPoint(game:GetService("Players").LocalPlayer:GetMouse().Hit.p)
                         local percent = math.clamp(mousePos.X - slider.SlideBar.AbsolutePosition.X, 0, slider.Main.AbsoluteSize.X) / slider.Main.AbsoluteSize.X
-                        local value
+                        local value = slider.min + (slider.max - slider.min) * percent
                         if slider.decimals < 1 then
-                            local tempval = (slider.min + (slider.max - slider.min) * percent) * slider.decimals / slider.decimals
-                            value = tempval:sub(1, decimalIndex + 1)
+                            value = tonumber(string.format("%." .. slider.decimals .. "f", value))
                         elseif slider.decimals >= 1 then
-                            value = math.floor((slider.min + (slider.max - slider.min) * percent) * slider.decimals) / slider.decimals
+                            value = math.floor(value)
                         end
                         value = math.clamp(value, slider.min, slider.max)
                         slider:Set(value)
