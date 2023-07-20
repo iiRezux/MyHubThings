@@ -29,6 +29,9 @@ function library:CreateWindow(name, version, icon)
 		RandomString = RandomString..string.char(math.random(97,122))
 	end
 
+	protect_gui(MyGui)
+	protect_gui(Window)
+
 	MyGui.Name = "VanisLib"
 	MyGui.Parent = cloneref(game:GetService("CoreGui"))
 	MyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
